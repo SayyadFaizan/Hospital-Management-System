@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 public class Patient {
     private final Connection connection;
@@ -14,14 +15,13 @@ public class Patient {
 
     public void addPatient(){
         Scanner scanner1 = new Scanner(System.in);
-        System.out.print("Enter Patient Name: ");
-        String name = scanner1.nextLine();
-        System.out.print("Enter Patient Gender: ");
-        String gender = scanner1.nextLine();
-        System.out.print("Enter Patient Age: ");
-        int age = scanner1.nextInt();
-
         try{
+            System.out.print("Enter Patient Name: ");
+            String name = scanner1.nextLine();
+            System.out.print("Enter Patient Gender: ");
+            String gender = scanner1.nextLine();
+            System.out.print("Enter Patient Age: ");
+            int age = scanner1.nextInt();
             String query = "INSERT INTO patients(name, age, gender) VALUES(?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, name);
@@ -34,8 +34,10 @@ public class Patient {
                 System.out.println("Failed to add Patient!!");
             }
 
-        }catch (SQLException e){
+        } catch(SQLException e){
             System.out.println(e.getMessage());
+        } catch(InputMismatchException e){
+            System.out.println("Input Mismatch Exception: For Input Int!");
         }
     }
     public void viewPatients(){
@@ -62,9 +64,9 @@ public class Patient {
     }
     public void deletePatient(){
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter id for Delete Patient: ");
-        int id = scanner.nextInt();
         try{
+            System.out.print("Enter id for Delete Patient: ");
+            int id = scanner.nextInt();
             String query = "DELETE FROM patients WHERE id = ? ";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
@@ -76,6 +78,8 @@ public class Patient {
             }
         } catch (SQLException e){
             System.out.println(e.getMessage());
+        } catch(InputMismatchException e){
+            System.out.println("Input Mismatch Exception: For Input Int!");
         }
     }
     public boolean getPatientById(int id){
