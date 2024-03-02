@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 public class Doctor {
     private final Connection connection;
@@ -14,12 +15,11 @@ public class Doctor {
 
     public void addDoctor(){
         Scanner scanner1 = new Scanner(System.in);
-        System.out.print("Enter Doctor Name: ");
-        String name = scanner1.nextLine();
-        System.out.print("Enter Doctor Specialization: ");
-        String Specialization = scanner1.nextLine();
-
         try{
+            System.out.print("Enter Doctor Name: ");
+            String name = scanner1.nextLine();
+            System.out.print("Enter Doctor Specialization: ");
+            String Specialization = scanner1.nextLine();
             String query = "INSERT INTO doctors(name, specialization) VALUES(?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, name);
@@ -58,9 +58,9 @@ public class Doctor {
     }
     public void deleteDoctor(){
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter id for Delete Doctor: ");
-        int id = scanner.nextInt();
         try{
+            System.out.print("Enter id for Delete Doctor: ");
+            int id = scanner.nextInt();
             String query = "DELETE FROM doctors WHERE id = ? ";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
@@ -72,6 +72,8 @@ public class Doctor {
             }
         } catch (SQLException e){
             System.out.println(e.getMessage());
+        } catch(InputMismatchException e){
+            System.out.println("Input Mismatch Exception: For Input Int!");
         }
     }
     public boolean getDoctorById(int id){
